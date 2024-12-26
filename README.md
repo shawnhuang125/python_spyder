@@ -79,9 +79,9 @@ C:\Program Files\ChromeDriver\
 ```
 - 保存設置
 
-點擊 確定 保存變更。
+- 點擊 確定 保存變更。
    
-- 動態爬蟲代碼
+- **動態爬蟲代碼**
 ```
 from selenium import webdriver
 from selenium.webdriver.common.by import By
