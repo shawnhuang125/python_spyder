@@ -92,7 +92,7 @@ ChromeDriver 131.0.xxxx.xx
 ```
 - 進入anaconda,開啟新專案
 - ![image](https://github.com/user-attachments/assets/2929fa17-0d9e-4273-8ddb-9db3aeafd373)
-- 先按`ctrl`+`s`給專案命名並以`.py`的形式儲存
+- 開啟新專案後,先按`ctrl`+`s`給專案命名並以`.py`的形式儲存
 - 到右邊的黑色終端區輸入
 
 ```
