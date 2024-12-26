@@ -93,11 +93,15 @@ ChromeDriver 131.0.xxxx.xx
 - 進入anaconda,開啟新專案
 - ![image](https://github.com/user-attachments/assets/2929fa17-0d9e-4273-8ddb-9db3aeafd373)
 - 開啟新專案後,先按`ctrl`+`s`給專案命名並以`.py`的形式儲存
+- ![image](https://github.com/user-attachments/assets/99d46e66-e7d1-4009-80da-e84a1c816806)
+
 - 到右邊的黑色終端區輸入
 
 ```
 pip install selenium
 ```
+- ![image](https://github.com/user-attachments/assets/e7f0c336-8d0d-4464-809f-8c553c0948b7)
+
 - 等待安裝完畢
 - 安裝完之後點擊以下重啟`kernel`
 - ![image](https://github.com/user-attachments/assets/971e5d05-a4a9-4ec1-99f4-65560e0ead90)
