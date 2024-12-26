@@ -64,7 +64,7 @@ for idx, title in enumerate(titles, 1):
 如果數據是通過 JavaScript 動態加載，需要使用 Selenium 或 Playwright。
 
 ### 4.1 使用 Selenium
-#### Selenium的瀏覽器驅動器安裝 | [教學影片]() | [ChromeDriver下載網址](https://googlechromelabs.github.io/chrome-for-testing/)
+#### Selenium的瀏覽器驅動器安裝 | [教學影片](https://youtu.be/mRkL0zl1OTQ) | [ChromeDriver下載網址](https://googlechromelabs.github.io/chrome-for-testing/)
 - 新增到 Path 系統變數
 - 返回到變數列表
 
