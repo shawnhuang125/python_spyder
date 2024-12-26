@@ -80,7 +80,36 @@ C:\Program Files\ChromeDriver\
 - 保存設置
 
 - 點擊 確定 保存變更。
-   
+
+- 按下`WIN`+`R`,輸入cmd.exe進入終端
+- 輸入
+```
+chromedriver --version
+```
+- 應顯示
+```
+ChromeDriver 131.0.xxxx.xx
+```
+- 進入anaconda,開啟新專案
+- ![image](https://github.com/user-attachments/assets/2929fa17-0d9e-4273-8ddb-9db3aeafd373)
+- 先按`ctrl`+`s`給專案命名並以`.py`的形式儲存
+- 到右邊的黑色終端區輸入
+
+```
+pip install selenium
+```
+- 等待安裝完畢
+- 安裝完之後點擊以下重啟`kernel`
+- ![image](https://github.com/user-attachments/assets/971e5d05-a4a9-4ec1-99f4-65560e0ead90)
+- 寫入程式測試已安裝成功
+```
+import selenium
+print("Selenium 已成功安裝！")
+```
+- 有安裝成功顯示
+```
+Selenium 已成功安裝！
+```
 - **動態爬蟲代碼**
 ```
 from selenium import webdriver
