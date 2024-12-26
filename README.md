@@ -63,10 +63,24 @@ for idx, title in enumerate(titles, 1):
 ## 動態網頁爬取
 如果數據是通過 JavaScript 動態加載，需要使用 Selenium 或 Playwright。
 
-### 4.1 使用 Selenium | [教學影片]() | [ChromeDriver下載網址](https://googlechromelabs.github.io/chrome-for-testing/)
-- 安裝 WebDriver
-- 下載對應版本的 ChromeDriver。 
-- 放在系統 PATH 或指定路徑。    
+### 4.1 使用 Selenium
+#### Selenium的瀏覽器驅動器安裝 | [教學影片]() | [ChromeDriver下載網址](https://googlechromelabs.github.io/chrome-for-testing/)
+- 新增到 Path 系統變數
+- 返回到變數列表
+
+- 在當前窗口，點擊 取消 回到系統變數列表。
+- 找到 Path 變數（在系統變數中），選中它後，點擊 編輯。
+- 編輯 Path
+
+- 在彈出的窗口中點擊 新建。
+- 添加以下路徑（假設 ChromeDriver 安裝在 C:\Program Files\ChromeDriver\）：
+```
+C:\Program Files\ChromeDriver\
+```
+- 保存設置
+
+點擊 確定 保存變更。
+   
 - 動態爬蟲代碼
 ```
 from selenium import webdriver
