@@ -1,5 +1,5 @@
 # python_spyder
-## 環境準備 
+## 環境準備階段
 ### 1.1 安裝 Python
 - 安裝最新版本的 Python。
 - 勾選 "Add Python to PATH"。
@@ -17,7 +17,7 @@ pip install -r requiredments.txt
 - 第二類就是心得文:完全沒有提到以上的關鍵字,這樣的話數據清洗光是定義特徵就會恨麻煩
 
 
-## 實現靜態網頁爬取
+## 實現靜態網頁爬取階段
 - 使用BeautifulSoup的python spyder
 - 可輸入目標網址及自訂義儲存檔案的名稱
 ```
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     main()
 
 ```
-## 數據清洗
+## 設計數據清洗階段
 - 通過讀取JSON檔案來處理裡面的文本數據
 - 再將處理過後的文檔儲存,可自訂義儲存檔案的名稱
 ```
@@ -144,5 +144,5 @@ df.to_csv(save_name, index=False, encoding="utf-8")
 print(f"清洗完成，已儲存為 {save_name} ")
 
 ```
-## 爬蟲優化
-## 部署與自動化
+## 打包階段
+## 部屬階段
