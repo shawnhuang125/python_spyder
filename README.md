@@ -5,143 +5,144 @@
 - 勾選 "Add Python to PATH"。
 ### 1.2 安裝相關庫
 - 使用 pip 安裝爬蟲相關的庫：
-
+- 下載附帶的`requiredments.txt`
 ```
-pip install requests beautifulsoup4 lxml
+pip install -r requiredments.txt
 ```
-- 如需動態爬取，額外安裝：
+- 確認是否都安裝正確:
+- 下載附件`spyder_package_check.py`並在專案環境內執行`spyder_package_check.py`.
+## 分析需求
+- 要蒐集的數據會是美食評價網頁,例如說個人部落格或是自己做的部落格網頁,經過分析過後基本上都屬於靜態網頁,所以BeautifulSoup的Python爬蟲就足以提供需求
+- 內文有分成兩類:一種是推薦文,推薦文的格式都會比較好,內文都包含'電話','地址','時間',其他的像是'店名','評價內容'的特徵定義比較有難度
+- 第二類就是心得文:完全沒有提到以上的關鍵字,這樣的話數據清洗光是定義特徵就會恨麻煩
 
-```
-pip install selenium
-```
-- 需要高效動態網頁爬取：
 
-```
-pip install playwright
-playwright install
-```
-
-## 爬蟲需求分析
-- 確認數據來源：確定需要爬取的網站和數據（如新聞標題、商品價格等）。
-- 檢查網站結構：
-- 使用瀏覽器開發者工具（按 F12）。
-- 檢查 HTML 標籤及層次結構。
-- 如果數據來自 API，找到其請求的接口和數據格式。
-
-## 實現靜態網頁爬蟲
-- 步驟
-### 3.1 發送 HTTP 請求
-- 使用 requests 發送請求：
-
+## 實現靜態網頁爬取
+- 使用BeautifulSoup的python spyder
+- 可輸入目標網址及自訂義儲存檔案的名稱
 ```
 import requests
-
-url = "https://example.com"
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-}
-response = requests.get(url, headers=headers)
-
-if response.status_code == 200:
-    print("請求成功")
-else:
-    print(f"請求失敗，狀態碼: {response.status_code}")
-```
-### 3.2 解析 HTML 數據
-- 使用 BeautifulSoup 解析 HTML：
-
-```
 from bs4 import BeautifulSoup
+import json
 
-soup = BeautifulSoup(response.text, "lxml")
+def connect(url):
+    try:
+        response = requests.get(url)  # 修正為 requests.get(url)
+
+        if response.status_code == 200:
+            print("Web connection established successfully!")
+            scrape_and_save(url, response)  # 呼叫 scrape_and_save 函數並傳遞 response
+        else:
+            print(f"Connection failed! Status code: {response.status_code}")
+    except Exception as e:
+        print(f"Unknown error: {e}")
+
+def scrape_and_save(url, response):
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    paragraphs = []  # 用於儲存段落
+
+    # 提取所有段落
+    for p in soup.find_all('p'):
+        text = p.get_text(strip=True)
+        paragraphs.append(text)
+
+    print("\nParagraph content:")
+
+    # 顯示段落
+    for i, paragraph in enumerate(paragraphs, start=1):
+        print(f"Paragraph {i}: {paragraph}")
+
+    # 儲存到檔案
+    save(paragraphs)
+
+def save(paragraphs):
+    file_name = input("\nInsert file name to store (Press enter for default): ").strip()
+    if not file_name:
+        file_name = "default_scraped_data"  # 提供預設檔名
+    file_name = file_name + ".json"
+
+    data_to_save = {"paragraphs": paragraphs}
+    # encoding="utf-8"可直接儲存中文字,不會轉換成其他編碼
+    with open(file_name, "w", encoding="utf-8") as file:
+        json.dump(data_to_save, file, ensure_ascii=False, indent=4)
+
+    print(f"\nData has been stored in '{file_name}'\n")
+
+def main():
+    while True:
+        url = input("Please insert a URL (Insert 'exit' to exit): ").strip()
+        if url.lower() == 'exit':
+            print("Exiting... Bye!")
+            break
+
+        if not url.startswith("http://") and not url.startswith("https://"):
+            print("Invalid URL! Must begin with 'http://' or 'https://'.")
+            continue
+
+        # 呼叫 connect 函數來處理連接與抓取
+        connect(url)
+
+# Ensure the block can run independently if other files import this one
+if __name__ == "__main__":
+    main()
+
 ```
-# 提取特定數據
-titles = soup.find_all("h1")  # 找到所有 h1 標籤
-for idx, title in enumerate(titles, 1):
-    print(f"標題 {idx}: {title.text.strip()}")
-
-## 動態網頁爬取
-如果數據是通過 JavaScript 動態加載，需要使用 Selenium 或 Playwright。
-
-### 4.1 使用 Selenium
-#### Selenium的瀏覽器驅動器安裝 | [教學影片](https://youtu.be/mRkL0zl1OTQ) | [ChromeDriver下載網址](https://googlechromelabs.github.io/chrome-for-testing/)
-- 新增到 Path 系統變數
-- 返回到變數列表
-
-- 在當前窗口，點擊 取消 回到系統變數列表。
-- 找到 Path 變數（在系統變數中），選中它後，點擊 編輯。
-- 編輯 Path
-
-- 在彈出的窗口中點擊 新建。
-- 添加以下路徑（假設 ChromeDriver 安裝在 C:\Program Files\ChromeDriver\）：
+## 數據清洗
+- 通過讀取JSON檔案來處理裡面的文本數據
+- 再將處理過後的文檔儲存,可自訂義儲存檔案的名稱
 ```
-C:\Program Files\ChromeDriver\
-```
-- 保存設置
+import json
+import pandas as pd
+file_name = input("open file:")
+# 讀取 JSON 檔案
+with open(file_name, "r", encoding="utf-8") as file:
+    data = json.load(file)
 
-- 點擊 確定 保存變更。
+# 提取資料
+restaurants = data.get("paragraphs", [])
 
-- 按下`WIN`+`R`,輸入cmd.exe進入終端
-- 輸入
-```
-chromedriver --version
-```
-- 應顯示
-```
-ChromeDriver 131.0.xxxx.xx
-```
-- 進入anaconda,開啟新專案
-- ![image](https://github.com/user-attachments/assets/2929fa17-0d9e-4273-8ddb-9db3aeafd373)
-- 開啟新專案後,先按`ctrl`+`s`給專案命名並以`.py`的形式儲存
-- ![image](https://github.com/user-attachments/assets/99d46e66-e7d1-4009-80da-e84a1c816806)
+# 初始化容器
+cleaned_restaurants = []
+current_restaurant = {}
 
-- 到右邊的黑色終端區輸入
+# 定義關鍵字標誌
+keywords = ["地址", "時間", "電話"]
+review_keywords = ["麵","菜","湯","好吃", "香濃", "推薦", "美味", "新鮮", "實在", "划算", "便宜"]  # 評價關鍵字
+# 遍歷段落提取資訊
+for paragraph in restaurants:
+    paragraph = paragraph.strip()  # 去除前後空白
+    if not paragraph:  # 跳過空行
+        continue
+    if "地址：" in paragraph or "地址:" in paragraph:
+        current_restaurant["address"] = paragraph.split("：")[-1].strip()
+    elif "時間：" in paragraph or "時間:" in paragraph:
+        current_restaurant["hours"] = paragraph.split("：")[-1].strip()
+    elif "電話：" in paragraph or "電話:" in paragraph:
+        current_restaurant["phone"] = paragraph.split("：")[-1].strip()
+    elif any(k in paragraph for k in keywords):  # 遇到關鍵欄位時忽略無效數據
+        continue
+    else:
+        if "address" in current_restaurant:  # 如果已有地址，視為新餐廳開始
+            cleaned_restaurants.append(current_restaurant)
+            current_restaurant = {}
+        current_restaurant["name"] = paragraph  # 當前段落視為餐廳名稱
+
+# 添加最後一間餐廳（如未結束的）
+#if current_restaurant:
+#    cleaned_restaurants.append(current_restaurant)
+
+# 將清理後的數據轉換為 DataFrame
+df = pd.DataFrame(cleaned_restaurants)
+
+# 補全缺失值
+df.fillna("未知", inplace=True)
+save_name = input("save file name:")
+# 儲存清洗後的結果
+df.to_csv(save_name, index=False, encoding="utf-8")
+
+print(f"清洗完成，已儲存為 {save_name} ")
 
 ```
-pip install selenium
-```
-- ![image](https://github.com/user-attachments/assets/e7f0c336-8d0d-4464-809f-8c553c0948b7)
-
-- 等待安裝完畢
-- 安裝完之後點擊以下重啟`kernel`
-- ![image](https://github.com/user-attachments/assets/971e5d05-a4a9-4ec1-99f4-65560e0ead90)
-- 寫入程式測試已安裝成功
-```
-import selenium
-print("Selenium 已成功安裝！")
-```
-- 有安裝成功顯示
-```
-Selenium 已成功安裝！
-```
-- **動態爬蟲代碼**
-```
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-
-# 配置 Selenium 瀏覽器
-
-options = Options()
-options.add_argument("--headless")  # 無頭模式
-service = Service("path/to/chromedriver")  # 替換為 ChromeDriver 路徑
-
-driver = webdriver.Chrome(service=service, options=options)
-
-# 打開網頁
-
-url = "https://example.com"
-driver.get(url)
-
-# 提取動態數據
-
-elements = driver.find_elements(By.TAG_NAME, "h1")
-for idx, element in enumerate(elements, 1):
-    print(f"標題 {idx}: {element.text}")
-
-driver.quit()
-```
-## 數據存儲
 ## 爬蟲優化
 ## 部署與自動化
